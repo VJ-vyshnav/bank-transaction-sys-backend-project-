@@ -28,10 +28,10 @@ const sendEmail = async (to, subject, text, html) => {
   try {
     const info = await transporter.sendMail({
       from: `"backend-ledger <${process.env.EMAIL_USER}>`, // sender address
-      to, // list of receivers
-      subject, // Subject line
-      text, // plain text body
-      html, // html body
+      to, 
+      subject, 
+      text, 
+      html, 
     });
 
     console.log('Message sent: %s', info.messageId);
@@ -49,6 +49,27 @@ async function sendRegsitrationEmail(userEmail, name) {
     await sendEmail(userEmail, subject, text, html);
 }
 
+async function sendTransactionEmail(userEmail, name, toAccount, amount) {
+    const subject = 'Transaction Notification';
+    const text = `Hello ${name},\n\nA transaction has been completed to account ${toAccount} for the amount of $${amount.toFixed(2)}.\n\nBest regards,\nThe backend-ledger Team`;
+    const html = `<p>Hello ${name},</p><p>A transaction has been completed to account ${toAccount} for the amount of $${amount.toFixed(2)}.</p><p>Best regards,<br>The backend-ledger Team</p>`;
+
+ await sendEmail(userEmail, subject, text, html);
+}
+
+async function sendTransactionfailedEmail(userEmail, name, toAccount, amount) {
+    const subject = 'Transaction Failed Notification';
+    const text = `Hello ${name},\n\nWe regret to inform you that a transaction to account ${toAccount} for the amount of $${amount.toFixed(2)} has failed.\n\nPlease check your account and try again.\n\nBest regards,\nThe backend-ledger Team`;
+    const html = `<p>Hello ${name},</p><p>We regret to inform you that a transaction to account ${toAccount} for the amount of $${amount.toFixed(2)} has failed.</p><p>Please check your account and try again.</p><p>Best regards,<br>The backend-ledger Team</p>`;  
+  
+  await sendEmail(userEmail, subject, text, html);
+}
+
+
+
 module.exports = {
-    sendRegsitrationEmail
+    sendRegsitrationEmail,
+    sendTransactionEmail,
+    sendTransactionfailedEmail,
+
 };
